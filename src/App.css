@@ -1,0 +1,12 @@
+.app {
+  text-align: center;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+}
+
+video {
+  margin-top: 1rem;
+  border: 3px solid black;
+  border-radius: 12px;
+  max-width: 100%;
+}
