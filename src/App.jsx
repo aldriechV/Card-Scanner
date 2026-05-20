@@ -88,8 +88,8 @@ function App() {
   // Crop from the actual video size
   const cropWidth = videoWidth * 0.7;
   const cropHeight = videoHeight * 0.7;
-  const cropX = (videoWidth - cropWidth) / 2;
-  const cropY = (videoHeight - cropHeight) / 2;
+  const cropX = videoWidth * 0.32;
+  const cropY = videoHeight * 0.15;
 
   // Output size for OCR
   canvas.width = 600;
@@ -117,12 +117,18 @@ function App() {
     const g = data[i + 1];
     const b = data[i + 2];
 
-    const gray = 0.299 * r + 0.587 * g + 0.114 * b;
-    const value = gray > 128 ? 255 : 0;
+    // Convert to grayscale
+    let gray = 0.299 * r + 0.587 * g + 0.114 * b;
 
-    data[i] = value;
-    data[i + 1] = value;
-    data[i + 2] = value;
+    // Increase contrast without forcing pure black/white
+    gray = (gray - 128) * 1.5 + 128;
+
+    // Clamp value between 0 and 255
+    gray = Math.max(0, Math.min(255, gray));
+
+    data[i] = gray;
+    data[i + 1] = gray;
+    data[i + 2] = gray;
   }
 
   context.putImageData(image, 0, 0);
