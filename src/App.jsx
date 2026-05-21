@@ -175,7 +175,8 @@ function App() {
           <img src={capturedImage} alt="Captured card preview" width="300" />
         </div>
         )}
-
+        
+        // Display OCR result (Remove later, this is in use for debugging) 
         <div className="result-box">
           <h2>Detected Text</h2>
           <pre>{text}</pre>
@@ -183,10 +184,25 @@ function App() {
       </div>
 
       <div className="info-container">
-        <p>Card Name</p>
-        <p>Set:</p>
-        <p>Cost</p>
-        <p>Rarity</p>
+        <div className="field-group">
+          <label>Card Name</label>
+          <input type="text" placeholder="Waiting for scan..." readOnly />
+        </div>
+
+        <div className="field-group">
+          <label>Set</label>
+          <input type="text" placeholder="Waiting for scan..." readOnly />
+        </div>
+
+        <div className="field-group">
+          <label>Cost</label>
+          <input type="text" placeholder="Waiting for scan..." readOnly />
+        </div>
+
+        <div className="field-group">
+          <label>Rarity</label>
+          <input type="text" placeholder="Waiting for scan..." readOnly />
+        </div>
       </div>
     </div>
   );
