@@ -103,13 +103,12 @@ h1 {
   border: 1px solid #3a3d50;
   border-radius: 10px;
   background-color: #11121a;
-  color: white;
   font-size: 1rem;
   outline: none;
 }
 
 .field-group input::placeholder {
-  color: #777b8f;
+  color: #555754;
 }
 
 .error {

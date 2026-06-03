@@ -13,6 +13,16 @@ function App() {
   const [isOcrReady, setIsOcrReady] = useState(false);
   const [capturedImage, setCapturedImage] = useState("");
    
+  // Initialize Card values as placeholders for now, will be populated after OCR processing
+  const [ cardDetails, setCardDetails ] = useState({
+    cardName: "Monkey D. Luffy",
+    cardSet: "OP05",
+    cardCost: "10",
+    cardRarity: "SEC",
+    cardText: 'When this card is played, draw 2 cards. If you have more than 5 cards in your hand, draw 3 cards instead.'
+  });
+
+
 
   useEffect(() => {
     async function startCamera() {
@@ -186,23 +196,49 @@ function App() {
       <div className="info-container">
         <div className="field-group">
           <label>Card Name</label>
-          <input type="text" placeholder="Waiting for scan..." readOnly />
+          <input type="text" 
+          value={text}
+          placeholder="Waiting for scan..."
+          onChange={(e) => setCardDetails({ ...cardDetails, cardName: e.target.value })}
+          />
         </div>
 
         <div className="field-group">
           <label>Set</label>
-          <input type="text" placeholder="Waiting for scan..." readOnly />
+          <input type="text" 
+          value={cardDetails.cardSet}
+          placeholder="Waiting for scan..." 
+          onChange={(e) => setCardDetails({ ...cardDetails, cardSet: e.target.value })}
+          />
         </div>
 
         <div className="field-group">
           <label>Cost</label>
-          <input type="text" placeholder="Waiting for scan..." readOnly />
+          <input type="text" 
+          value={cardDetails.cardCost}
+          placeholder="Waiting for scan..."
+          onChange={(e) => setCardDetails({ ...cardDetails, cardCost: e.target.value })}
+          />
         </div>
 
         <div className="field-group">
           <label>Rarity</label>
-          <input type="text" placeholder="Waiting for scan..." readOnly />
+          <input type="text" 
+          value={cardDetails.cardRarity}
+          placeholder="Waiting for scan..." 
+          onChange={(e) => setCardDetails({ ...cardDetails, cardRarity: e.target.value })}
+          />
         </div>
+
+        <div className="field-group">
+          <label>Text</label>
+          <input type="text" 
+          value={cardDetails.cardText}
+          placeholder="Waiting for scan..." 
+          onChange={(e) => setCardDetails({ ...cardDetails, cardText: e.target.value })}
+          />
+        </div>
+
       </div>
     </div>
   );
