@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createWorker } from "tesseract.js";
+import CardDatabase from "./components/Database";
 import "./App.css";
 
 function App() {
@@ -12,6 +13,17 @@ function App() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isOcrReady, setIsOcrReady] = useState(false);
   const [capturedImage, setCapturedImage] = useState("");
+
+  //tabs to swap between both the camera and database
+  const [activeTab, setActiveTab] = useState("scanner");
+  const [savedCards, setSavedCards] = useState(() => {
+    const storedCards = localStorage.getItem("savedCards");
+    return storedCards ? JSON.parse(storedCards) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("savedCards", JSON.stringify(savedCards));
+  }, [savedCards]);
    
   // Initialize Card values as placeholders for now, will be populated after OCR processing
   const [ cardDetails, setCardDetails ] = useState({
@@ -22,8 +34,19 @@ function App() {
     cardText: 'When this card is played, draw 2 cards. If you have more than 5 cards in your hand, draw 3 cards instead.'
   });
 
+  //Function to save the card from card details, will be used to save the card to the database in the future
+  function saveCard() {
+    const newCard = {
+      name: cardDetails.cardName,
+      set: cardDetails.cardSet,
+      cost: cardDetails.cardCost,
+      rarity: cardDetails.cardRarity,
+      text: cardDetails.cardText,
+    };
+    setSavedCards(prevCards => [...prevCards, newCard]);
+  }
 
-
+  //Handling for the camera start up 
   useEffect(() => {
     async function startCamera() {
       try {
@@ -43,6 +66,8 @@ function App() {
       }
     }
 
+    //OCR Used to read the text on the card, will be used to populate the card details fields
+    //Will be changed to GPT API in the future to better parse the text and extract relevant information
     async function loadOCR() {
       try {
         const worker = await createWorker("eng");
@@ -60,6 +85,8 @@ function App() {
       }
     }
 
+
+    //Process to start the camera and load the OCR worker when the component mounts
     startCamera();
     loadOCR();
 
@@ -158,6 +185,8 @@ function App() {
   setIsProcessing(false);
 }
 
+
+//Frontend deployed
   return (
     <div className="app-container">
       <div className="video-container">
@@ -186,7 +215,7 @@ function App() {
         </div>
         )}
         
-        // Display OCR result (Remove later, this is in use for debugging) 
+        {/* Display OCR result (Remove later, this is in use for debugging) */}
         <div className="result-box">
           <h2>Detected Text</h2>
           <pre>{text}</pre>
@@ -238,6 +267,8 @@ function App() {
           onChange={(e) => setCardDetails({ ...cardDetails, cardText: e.target.value })}
           />
         </div>
+
+        <button onClick={saveCard}> Save Card </button>
 
       </div>
     </div>
