@@ -295,7 +295,7 @@ function App() {
 
       {activeTab === "database" && (
         <div className="database-section">
-          {/* Your database content goes here */}
+          <CardDatabase savedCards={savedCards} />
         </div>
       )}
 
