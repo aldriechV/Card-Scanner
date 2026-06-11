@@ -189,6 +189,23 @@ function App() {
 //Frontend deployed
   return (
     <div className="app-container">
+
+      <div className="tabs">
+        <button
+          className={activeTab === "scanner" ? "tab active" : "tab"}
+          onClick={() => setActiveTab("scanner")}
+        >
+          Scanner
+        </button>
+
+        <button
+          className={activeTab === "database" ? "tab active" : "tab"}
+          onClick={() => setActiveTab("database")}
+        >
+          Database
+        </button>
+      </div>
+      
       <div className="video-container">
         <h1>Card Scanner</h1>
 
