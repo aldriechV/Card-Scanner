@@ -29,9 +29,7 @@ function App() {
   const [ cardDetails, setCardDetails ] = useState({
     cardName: "Monkey D. Luffy",
     cardSet: "OP05",
-    cardCost: "10",
-    cardRarity: "SEC",
-    cardText: 'When this card is played, draw 2 cards. If you have more than 5 cards in your hand, draw 3 cards instead.'
+    Quantity: "1"
   });
 
   //Function to save the card from card details, will be used to save the card to the database in the future
@@ -51,18 +49,17 @@ function App() {
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
+          video: { facingMode: "environment" },
           audio: false,
         });
 
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+          await videoRef.current.play();
         }
       } catch (err) {
-        setError(
-          "Unable to access the camera. Please allow camera access and try again."
-        );
-        console.error("Error accessing camera:", err);
+        setError("Could not access the camera.");
+        console.error(err);
       }
     }
 
@@ -85,6 +82,18 @@ function App() {
       }
     }
 
+    // Cleanup function to stop the camera and terminate the OCR worker
+    const stopCamera = () => {
+      if (videoRef.current && videoRef.current.srcObject) {
+        const stream = videoRef.current.srcObject;
+        const tracks = stream.getTracks();
+
+        tracks.forEach((track) => track.stop());
+
+        videoRef.current.srcObject = null;
+      }
+    };
+    
 
     //Process to start the camera and load the OCR worker when the component mounts
     startCamera();
