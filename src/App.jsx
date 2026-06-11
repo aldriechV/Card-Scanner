@@ -206,7 +206,9 @@ function App() {
         </button>
       </div>
       
-      <div className="video-container">
+      {activeTab === "scanner" && (
+        <div className="scanner-section">
+          <div className="video-container">
         <h1>Card Scanner</h1>
 
         {error && <p className="error">{error}</p>}
@@ -288,6 +290,16 @@ function App() {
         <button onClick={saveCard}> Save Card </button>
 
       </div>
+        </div>
+      )}
+
+      {activeTab === "database" && (
+        <div className="database-section">
+          {/* Your database content goes here */}
+        </div>
+      )}
+
+      
     </div>
   );
 }
