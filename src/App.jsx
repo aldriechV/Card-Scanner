@@ -21,10 +21,6 @@ function App() {
     return storedCards ? JSON.parse(storedCards) : [];
   });
 
-  useEffect(() => {
-    localStorage.setItem("savedCards", JSON.stringify(savedCards));
-  }, [savedCards]);
-   
   // Initialize Card values as placeholders for now, will be populated after OCR processing
   const [ cardDetails, setCardDetails ] = useState({
     cardName: "Monkey D. Luffy",
@@ -32,41 +28,57 @@ function App() {
     Quantity: "1"
   });
 
-  //Function to save the card from card details, will be used to save the card to the database in the future
-  function saveCard() {
-    const newCard = {
-      name: cardDetails.cardName,
-      set: cardDetails.cardSet,
-      cost: cardDetails.cardCost,
-      rarity: cardDetails.cardRarity,
-      text: cardDetails.cardText,
-    };
-    setSavedCards(prevCards => [...prevCards, newCard]);
-  }
-
-  //Handling for the camera start up 
+  //Save Cards into a local storage
   useEffect(() => {
-    async function startCamera() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" },
-          audio: false,
-        });
+    localStorage.setItem("savedCards", JSON.stringify(savedCards));
+  }, [savedCards]);
 
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          await videoRef.current.play();
-        }
-      } catch (err) {
-        setError("Could not access the camera.");
-        console.error(err);
+  //Function to start the camera, includes error handling
+  const startCamera = async () => {
+  try {
+    setError("");
+
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        facingMode: "environment",
+      },
+    });
+
+    if (videoRef.current) {
+      videoRef.current.srcObject = stream;
+      await videoRef.current.play();
+    }
+    } catch (err) {
+      console.error(err);
+      setError("Could not access camera.");
+    }
+  };  
+
+  // Cleanup function to stop the camera and terminate the OCR worker
+  const stopCamera = () => {
+      if (videoRef.current && videoRef.current.srcObject) {
+        const stream = videoRef.current.srcObject;
+        const tracks = stream.getTracks();
+
+        tracks.forEach((track) => track.stop());
+
+        videoRef.current.srcObject = null;
       }
+  };
+  
+  //OCR Used to read the text on the card, will be used to populate the card details fields
+  //Will be changed to GPT API in the future to better parse the text and extract relevant information
+  const loadOCR = async () => {
+
+    //Added to handle if OCR already exists
+    if (workerRef.current) {
+      setIsOcrReady(true);
+      return;
     }
 
-    //OCR Used to read the text on the card, will be used to populate the card details fields
-    //Will be changed to GPT API in the future to better parse the text and extract relevant information
-    async function loadOCR() {
       try {
+        setIsOcrReady(false);
+
         const worker = await createWorker("eng");
 
         await worker.setParameters({
@@ -79,34 +91,35 @@ function App() {
       } catch (err) {
         console.error("Error loading OCR:", err);
         setError("OCR failed to load.");
+        setIsOcrReady(false);
       }
+  };
+
+  //Control Camera when switching tabs
+  useEffect(() => {
+    if (activeTab === "scanner") {
+      startCamera();
+      loadOCR();
+    } else {
+      stopCamera();
     }
 
-    // Cleanup function to stop the camera and terminate the OCR worker
-    const stopCamera = () => {
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject;
-        const tracks = stream.getTracks();
-
-        tracks.forEach((track) => track.stop());
-
-        videoRef.current.srcObject = null;
-      }
-    };
-    
-
-    //Process to start the camera and load the OCR worker when the component mounts
-    startCamera();
-    loadOCR();
-
     return () => {
-      if (workerRef.current) {
-            workerRef.current.terminate();
-          }
-        };
-  }, []);
+      stopCamera();
+    };
+  }, [activeTab]);
 
-  async function captureCard() {
+  //Function to save the card from card details, will be used to save the card to the database in the future
+  function saveCard() {
+    const newCard = {
+      name: cardDetails.cardName,
+      set: cardDetails.cardSet,
+      scanned: cardDetails.quantity
+    };
+    setSavedCards(prevCards => [...prevCards, newCard]);
+  }
+
+    async function captureCard() {
   if (!videoRef.current || !canvasRef.current) return;
 
   if (!workerRef.current) {
