@@ -25,7 +25,7 @@ function App() {
   const [ cardDetails, setCardDetails ] = useState({
     cardName: "Monkey D. Luffy",
     cardSet: "OP05",
-    Quantity: "1"
+    Quantity: 1
   });
 
   //Save Cards into a local storage
@@ -112,14 +112,20 @@ function App() {
   //Function to save the card from card details, will be used to save the card to the database in the future
   function saveCard() {
     const newCard = {
+      id: Date.now(),
       name: cardDetails.cardName,
       set: cardDetails.cardSet,
       scanned: cardDetails.quantity
     };
-    setSavedCards(prevCards => [...prevCards, newCard]);
+    setSavedCards((prevCards) => [...prevCards, newCard]);
   }
 
-    async function captureCard() {
+  function clearCardDatabase() {
+    setSavedCards([]);
+    localStorage.removeItem("savedCards");
+  }
+
+  async function captureCard() {
   if (!videoRef.current || !canvasRef.current) return;
 
   if (!workerRef.current) {
@@ -205,7 +211,7 @@ function App() {
   }
 
   setIsProcessing(false);
-}
+  }
 
 
 //Frontend deployed
@@ -267,7 +273,7 @@ function App() {
         <div className="field-group">
           <label>Card Name</label>
           <input type="text" 
-          value={text}
+          value={cardDetails.cardName}
           placeholder="Waiting for scan..."
           onChange={(e) => setCardDetails({ ...cardDetails, cardName: e.target.value })}
           />
@@ -283,29 +289,11 @@ function App() {
         </div>
 
         <div className="field-group">
-          <label>Cost</label>
-          <input type="text" 
-          value={cardDetails.cardCost}
-          placeholder="Waiting for scan..."
-          onChange={(e) => setCardDetails({ ...cardDetails, cardCost: e.target.value })}
-          />
-        </div>
-
-        <div className="field-group">
-          <label>Rarity</label>
-          <input type="text" 
-          value={cardDetails.cardRarity}
+          <label>Quantity</label>
+          <input type="number" 
+          value={cardDetails.cardQuantity}
           placeholder="Waiting for scan..." 
-          onChange={(e) => setCardDetails({ ...cardDetails, cardRarity: e.target.value })}
-          />
-        </div>
-
-        <div className="field-group">
-          <label>Text</label>
-          <input type="text" 
-          value={cardDetails.cardText}
-          placeholder="Waiting for scan..." 
-          onChange={(e) => setCardDetails({ ...cardDetails, cardText: e.target.value })}
+          onChange={(e) => setCardDetails({ ...cardDetails, cardQuantity: e.target.value })}
           />
         </div>
 
@@ -317,7 +305,10 @@ function App() {
 
       {activeTab === "database" && (
         <div className="database-section">
-          <CardDatabase savedCards={savedCards} />
+          <CardDatabase 
+          savedCards={savedCards}
+          clearDatabase={clearCardDatabase}
+          />
         </div>
       )}
 

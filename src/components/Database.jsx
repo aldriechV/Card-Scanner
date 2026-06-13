@@ -1,7 +1,13 @@
-function CardDatabase({ savedCards }) {
+function CardDatabase({ savedCards, clearDatabase }) {
   return (
     <div className="database-section">
       <h2>Scanned Card Database</h2>
+
+      {savedCards.length > 0 && (
+        <button onClick={clearDatabase}>
+          Clear Database
+        </button>
+      )}
 
       {savedCards.length === 0 ? (
         <p>No cards saved yet.</p>
@@ -13,6 +19,10 @@ function CardDatabase({ savedCards }) {
 
               <p>
                 <strong>Set:</strong> {card.set || "N/A"}
+              </p>
+
+              <p>
+                <strong>Quantity:</strong> {card.quantity || "N/A"}
               </p>
               
               <p>
