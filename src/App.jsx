@@ -25,7 +25,7 @@ function App() {
   const [ cardDetails, setCardDetails ] = useState({
     cardName: "Monkey D. Luffy",
     cardSet: "OP05",
-    Quantity: 1
+    quantity: 1
   });
 
   //Save Cards into a local storage
@@ -112,13 +112,37 @@ function App() {
   //Function to save the card from card details, will be used to save the card to the database in the future
   function saveCard() {
     const newCard = {
-      id: Date.now(),
-      name: cardDetails.cardName,
-      set: cardDetails.cardSet,
-      scanned: cardDetails.quantity
+      name: cardDetails.cardName.trim(),
+      set: cardDetails.cardSet.trim(),
+      quantity: Number(cardDetails.quantity) || 1,
+      dateScanned: new Date().toLocaleString(),
     };
-    setSavedCards((prevCards) => [...prevCards, newCard]);
+
+    setSavedCards((prevCards) => {
+      const existingCardIndex = prevCards.findIndex(
+        (card) =>
+          card.name.toLowerCase() === newCard.name.toLowerCase() &&
+          card.set.toLowerCase() === newCard.set.toLowerCase()
+      );
+
+      if (existingCardIndex !== -1) {
+        return prevCards.map((card, index) => {
+          if (index === existingCardIndex) {
+            return {
+              ...card,
+              quantity: Number(card.quantity || 1) + newCard.quantity,
+              dateScanned: new Date().toLocaleString(),
+            };
+          }
+
+          return card;
+        });
+      }
+
+      return [...prevCards, newCard];
+    });
   }
+
 
   function clearCardDatabase() {
     setSavedCards([]);
@@ -291,9 +315,10 @@ function App() {
         <div className="field-group">
           <label>Quantity</label>
           <input type="number" 
-          value={cardDetails.cardQuantity}
+          min="1"
+          value={cardDetails.quantity}
           placeholder="Waiting for scan..." 
-          onChange={(e) => setCardDetails({ ...cardDetails, cardQuantity: e.target.value })}
+          onChange={(e) => setCardDetails({ ...cardDetails, quantity: e.target.value })}
           />
         </div>
 

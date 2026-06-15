@@ -22,7 +22,7 @@ function CardDatabase({ savedCards, clearDatabase }) {
               </p>
 
               <p>
-                <strong>Quantity:</strong> {card.quantity || "N/A"}
+                <strong>Quantity:</strong> {card.quantity || 1}
               </p>
               
               <p>
