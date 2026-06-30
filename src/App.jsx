@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createWorker } from "tesseract.js";
 import CardDatabase from "./components/Database";
-import "./App.css";
+import "./component-css/App.css";
 
 function App() {
   const videoRef = useRef(null);
@@ -242,26 +242,35 @@ function App() {
   return (
     <div className="app-container">
 
-      <div className="tabs">
-        <button
-          className={activeTab === "scanner" ? "tab active" : "tab"}
-          onClick={() => setActiveTab("scanner")}
-        >
-          Scanner
-        </button>
+      <header className="top-bar">
+        <div className="top-bar-content">
+          <div className="brand">
+            Card Scanner
+          </div>
 
-        <button
-          className={activeTab === "database" ? "tab active" : "tab"}
-          onClick={() => setActiveTab("database")}
-        >
-          Database
-        </button>
-      </div>
-      
+          <nav className="tabs">
+            <button
+              className={`tab ${activeTab === "scanner" ? "active" : ""}`}
+              onClick={() => setActiveTab("scanner")}
+            >
+              Scanner
+            </button>
+
+            <button
+              className={`tab ${activeTab === "database" ? "active" : ""}`}
+              onClick={() => setActiveTab("database")}
+            >
+              Database
+            </button>
+          </nav>
+        </div>
+      </header>
+
+        
+        
       {activeTab === "scanner" && (
         <div className="scanner-section">
           <div className="video-container">
-        <h1>Card Scanner</h1>
 
         {error && <p className="error">{error}</p>}
 

@@ -116,28 +116,77 @@ h1 {
   margin-bottom: 12px;
 }
 
+.top-bar {
+  width: 100%;
+  background: #11121a;
+  border-bottom: 1px solid #2e3142;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.top-bar-content {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 14px 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.brand {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
 
 .tabs {
+  width: fit-content;
+  max-width: 90vw;
+  margin: 0 auto 28px;
+  padding: 6px;
   display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
-  justify-content: center;
+  gap: 8px;
+
+  background: #11121a;
+  border: 1px solid #3a3d50;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .tab {
   padding: 10px 18px;
   border: 1px solid #3a3d50;
   border-radius: 999px;
+
   background: #11121a;
   color: #c7c9d3;
   cursor: pointer;
+  font-size: 0.95rem;
   font-weight: 600;
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.2s ease;
+}
+
+.tab:hover {
+  color: white;
+  background: #1b1d29;
 }
 
 .tab.active {
   background: #5b6cff;
   color: white;
   border-color: #5b6cff;
+}
+.tab:active{
+  transform: scale(0.98);
 }
 
 .database-section {
