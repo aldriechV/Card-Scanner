@@ -244,7 +244,7 @@ function App() {
 
       <header className="top-bar">
         <div className="top-bar-content">
-          <div className="brand">
+          <div className="brand ">
             Card Scanner
           </div>
 
