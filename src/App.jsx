@@ -243,6 +243,7 @@ function App() {
     <div className="app-container">
 
       <header className="top-bar">
+
         <div className="top-bar-content">
           <div className="brand ">
             Card Scanner
@@ -270,70 +271,72 @@ function App() {
         
       {activeTab === "scanner" && (
         <div className="scanner-section">
-          <div className="video-container">
+          <div className="scanner-layout">
+            <div className="video-container">
 
-        {error && <p className="error">{error}</p>}
+              {error && <p className="error">{error}</p>}
 
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          muted
-          className="camera"
-        />
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="camera"
+              />
 
-        <canvas ref={canvasRef} style={{ display: "none" }} />
+              <canvas ref={canvasRef} style={{ display: "none" }} />
 
-        <button onClick={captureCard} disabled={isProcessing || !isOcrReady}>
-          {isProcessing ? "Scanning..." : "Scan Text"}
-        </button>
+              <button onClick={captureCard} disabled={isProcessing || !isOcrReady}>
+                {isProcessing ? "Scanning..." : "Scan Text"}
+              </button>
 
-        {capturedImage && (
-        <div className="capture-preview">
-          <h2>Captured Image</h2>
-          <img src={capturedImage} alt="Captured card preview" width="300" />
-        </div>
-        )}
+              {capturedImage && (
+              <div className="capture-preview">
+                <h2>Captured Image</h2>
+                <img src={capturedImage} alt="Captured card preview" width="300" />
+              </div>
+              )}
         
-        {/* Display OCR result (Remove later, this is in use for debugging) */}
-        <div className="result-box">
-          <h2>Detected Text</h2>
-          <pre>{text}</pre>
-        </div>
-      </div>
+              {/* Display OCR result (Remove later, this is in use for debugging) */}
+              <div className="result-box">
+                <h2>Detected Text</h2>
+                <pre>{text}</pre>
+              </div>
+            </div>
 
-      <div className="info-container">
-        <div className="field-group">
-          <label>Card Name</label>
-          <input type="text" 
-          value={cardDetails.cardName}
-          placeholder="Waiting for scan..."
-          onChange={(e) => setCardDetails({ ...cardDetails, cardName: e.target.value })}
-          />
-        </div>
+            <div className="info-container">
+              <div className="field-group">
+                <label>Card Name</label>
+                <input type="text" 
+                value={cardDetails.cardName}
+                placeholder="Waiting for scan..."
+                onChange={(e) => setCardDetails({ ...cardDetails, cardName: e.target.value })}
+                />
+              </div>
 
-        <div className="field-group">
-          <label>Set</label>
-          <input type="text" 
-          value={cardDetails.cardSet}
-          placeholder="Waiting for scan..." 
-          onChange={(e) => setCardDetails({ ...cardDetails, cardSet: e.target.value })}
-          />
-        </div>
+              <div className="field-group">
+                <label>Set</label>
+                <input type="text" 
+                value={cardDetails.cardSet}
+                placeholder="Waiting for scan..." 
+                onChange={(e) => setCardDetails({ ...cardDetails, cardSet: e.target.value })}
+                />
+              </div>
 
-        <div className="field-group">
-          <label>Quantity</label>
-          <input type="number" 
-          min="1"
-          value={cardDetails.quantity}
-          placeholder="Waiting for scan..." 
-          onChange={(e) => setCardDetails({ ...cardDetails, quantity: e.target.value })}
-          />
-        </div>
+              <div className="field-group">
+                <label>Quantity</label>
+                <input type="number" 
+                min="1"
+                value={cardDetails.quantity}
+                placeholder="Waiting for scan..." 
+                onChange={(e) => setCardDetails({ ...cardDetails, quantity: e.target.value })}
+                />
+              </div>
 
-        <button onClick={saveCard}> Save Card </button>
+              <button onClick={saveCard}> Save Card </button>
 
-      </div>
+              </div>
+            </div>
         </div>
       )}
 
