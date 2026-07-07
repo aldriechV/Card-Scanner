@@ -286,22 +286,10 @@ function App() {
 
               <canvas ref={canvasRef} style={{ display: "none" }} />
 
-              <button onClick={captureCard} disabled={isProcessing || !isOcrReady}>
+              <button className="scan-button" onClick={captureCard} disabled={isProcessing || !isOcrReady}>
                 {isProcessing ? "Scanning..." : "Scan Text"}
               </button>
-
-              {capturedImage && (
-              <div className="capture-preview">
-                <h2>Captured Image</h2>
-                <img src={capturedImage} alt="Captured card preview" width="300" />
-              </div>
-              )}
         
-              {/* Display OCR result (Remove later, this is in use for debugging) */}
-              <div className="result-box">
-                <h2>Detected Text</h2>
-                <pre>{text}</pre>
-              </div>
             </div>
 
             <div className="info-container">
@@ -333,7 +321,9 @@ function App() {
                 />
               </div>
 
-              <button onClick={saveCard}> Save Card </button>
+              <button className="scan-button" onClick={saveCard}>
+                Save Card
+              </button>
 
               </div>
             </div>
