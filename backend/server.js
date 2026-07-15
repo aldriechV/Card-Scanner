@@ -15,15 +15,19 @@ app.get("/", (req, res) => {
 
 app.get("/cards", async (req, res) => {
     try {
-        const cards = await prisma.card.findMany();
+        const card = await prisma.card.create({
+            data: {
+                name: req.body.name,
+                quantity: req.body.quantity ?? 1
+            }
+        });
 
-        res.json(cards);
+        res.status(201).json(card);
     } catch (error) {
         console.error(error);
-        res.status(500).json({
-            error: "Failed to retrieve cards."
-        });
+        res.status(500).json({ error: "An error occurred while creating the card." });
     }
+
 });
 
 app.listen(3001, () => {
