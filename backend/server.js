@@ -69,6 +69,7 @@ app.get("/cards/:id", async (req, res) => {
     }
 });
 
+//check to see if the server exists
 app.listen(3001, () => {
     console.log("Server is running on port 3001.");
 
@@ -89,5 +90,23 @@ app.put("/cards/:id", async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "An error occurred while updating the card." });
+    }
+});
+
+
+//deleting a card:
+app.delete("/cards/:id", async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+
+        await prisma.card.delete({
+            where: { id: id }
+        });
+
+        res.json({ message: "Card deleted successfully." });
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({ error: "An error occurred while deleting the card." });
     }
 });
