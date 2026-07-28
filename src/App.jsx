@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createWorker } from "tesseract.js";
 import CardDatabase from "./components/Database";
+import { getCards, clearCards } from "./api/cards";
 import "./component-css/App.css";
 
 function App() {
@@ -16,10 +17,16 @@ function App() {
 
   //tabs to swap between both the camera and database
   const [activeTab, setActiveTab] = useState("scanner");
-  const [savedCards, setSavedCards] = useState(() => {
-    const storedCards = localStorage.getItem("savedCards");
-    return storedCards ? JSON.parse(storedCards) : [];
-  });
+  const [savedCards, setSavedCards] = useState([]);
+
+  useEffect(() => {
+    async function loadCards() {
+        const cards = await getCards();
+        setSavedCards(cards);
+    }
+
+    loadCards();
+  }, []);
 
   // Initialize Card values as placeholders for now, will be populated after OCR processing
   const [ cardDetails, setCardDetails ] = useState({
@@ -145,8 +152,16 @@ function App() {
 
 
   function clearCardDatabase() {
-    setSavedCards([]);
-    localStorage.removeItem("savedCards");
+    const clearDatabase = async () => {
+      try {
+          await clearCards();
+
+          setSavedCards([]);
+
+      } catch (error) {
+          console.error(error);
+      }
+    };
   }
 
   async function captureCard() {

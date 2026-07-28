@@ -89,18 +89,19 @@ app.put("/cards/:id", async (req, res) => {
 
 
 //deleting a card:
-app.delete("/cards/:id", async (req, res) => {
+exports.clearCards = async (req, res) => {
     try {
-        const id = parseInt(req.params.id);
+        await prisma.card.deleteMany();
 
-        await prisma.card.delete({
-            where: { id: id }
+        res.json({
+            message: "Database cleared."
         });
 
-        res.json({ message: "Card deleted successfully." });
     } catch (error) {
         console.error(error);
 
-        res.status(500).json({ error: "An error occurred while deleting the card." });
+        res.status(500).json({
+            error: "Failed to clear database."
+        });
     }
-});
+};
