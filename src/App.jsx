@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createWorker } from "tesseract.js";
 import CardDatabase from "./components/Database";
-import { getCards, clearCards } from "./api/cards";
+import { createCard, getCards, clearCards } from "./api/cards";
 import "./component-css/App.css";
 
 function App() {
@@ -19,12 +19,17 @@ function App() {
   const [activeTab, setActiveTab] = useState("scanner");
   const [savedCards, setSavedCards] = useState([]);
 
-  useEffect(() => {
-    async function loadCards() {
+  // function to load cards from the database and set them in state
+  const loadCards = async () => {
+    try {
         const cards = await getCards();
         setSavedCards(cards);
+    } catch (error) {
+        console.error(error);
     }
+  };
 
+  useEffect(() => {
     loadCards();
   }, []);
 
@@ -34,11 +39,6 @@ function App() {
     cardSet: "OP05",
     quantity: 1
   });
-
-  //Save Cards into a local storage
-  useEffect(() => {
-    localStorage.setItem("savedCards", JSON.stringify(savedCards));
-  }, [savedCards]);
 
   //Function to start the camera, includes error handling
   const startCamera = async () => {
