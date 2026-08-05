@@ -117,37 +117,30 @@ function App() {
   }, [activeTab]);
 
   //Function to save the card from card details, will be used to save the card to the database in the future
-  function saveCard() {
+  async function saveCard() {
+
     const newCard = {
       name: cardDetails.cardName.trim(),
       set: cardDetails.cardSet.trim(),
       quantity: Number(cardDetails.quantity) || 1,
-      dateScanned: new Date().toLocaleString(),
     };
 
-    setSavedCards((prevCards) => {
-      const existingCardIndex = prevCards.findIndex(
-        (card) =>
-          card.name.toLowerCase() === newCard.name.toLowerCase() &&
-          card.set.toLowerCase() === newCard.set.toLowerCase()
-      );
+    try {
 
-      if (existingCardIndex !== -1) {
-        return prevCards.map((card, index) => {
-          if (index === existingCardIndex) {
-            return {
-              ...card,
-              quantity: Number(card.quantity || 1) + newCard.quantity,
-              dateScanned: new Date().toLocaleString(),
-            };
-          }
+      // Send card to backend
+      await createCard(newCard);
 
-          return card;
-        });
-      }
+      // Refresh cards from database
+      await loadCards();
 
-      return [...prevCards, newCard];
-    });
+      console.log("Card saved!");
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
   }
 
 
@@ -156,7 +149,7 @@ function App() {
       try {
           await clearCards();
 
-          setSavedCards([]);
+          await loadCards(); 
 
       } catch (error) {
           console.error(error);
