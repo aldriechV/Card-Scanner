@@ -122,6 +122,8 @@ function App() {
     const newCard = {
       name: cardDetails.cardName.trim(),
       set: cardDetails.cardSet.trim(),
+      game: cardDetails.game.trim(),
+      rarity: cardDetails.rarity.trim(),
       quantity: Number(cardDetails.quantity) || 1,
     };
 
@@ -326,6 +328,36 @@ function App() {
                 value={cardDetails.quantity}
                 placeholder="Waiting for scan..." 
                 onChange={(e) => setCardDetails({ ...cardDetails, quantity: e.target.value })}
+                />
+              </div>
+
+              <div className="field-group">
+                <label>Game</label>
+                <input
+                  type="text"
+                  value={cardDetails.game}
+                  placeholder="Waiting for scan..."
+                  onChange={(e) =>
+                    setCardDetails({
+                      ...cardDetails,
+                      game: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className="field-group">
+                <label>Rarity</label>
+                <input
+                  type="text"
+                  value={cardDetails.rarity}
+                  placeholder="Waiting for scan..."
+                  onChange={(e) =>
+                    setCardDetails({
+                      ...cardDetails,
+                      rarity: e.target.value,
+                    })
+                  }
                 />
               </div>
 
