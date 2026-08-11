@@ -12,4 +12,6 @@ model Card {
   name        String
   quantity    Int      @default(1)
   dateScanned DateTime @default(now())
+  game        String?
+  rarity      String?
 }
