@@ -8,10 +8,11 @@ datasource db {
 }
 
 model Card {
-  id          Int      @id @default(autoincrement())
-  name        String
-  quantity    Int      @default(1)
-  dateScanned DateTime @default(now())
-  game        String?
-  rarity      String?
+  id           Int      @id @default(autoincrement())
+  name         String
+  set          String?
+  game         String?
+  rarity       String?
+  quantity     Int      @default(1)
+  dateScanned  DateTime @default(now())
 }

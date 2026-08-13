@@ -25,7 +25,8 @@ function App() {
         const cards = await getCards();
         setSavedCards(cards);
     } catch (error) {
-        console.error(error);
+        console.error("Failed to load cards:", error);
+        setError("Failed to load cards from the database.");
     }
   };
 
@@ -37,6 +38,8 @@ function App() {
   const [ cardDetails, setCardDetails ] = useState({
     cardName: "Monkey D. Luffy",
     cardSet: "OP05",
+    game: "One Piece Card Game",
+    rarity: "SEC",
     quantity: 1
   });
 
@@ -146,7 +149,7 @@ function App() {
   }
 
 
-  function clearCardDatabase() {
+async function clearCardDatabase() {
     const clearDatabase = async () => {
       try {
           await clearCards();
@@ -154,7 +157,7 @@ function App() {
           await loadCards(); 
 
       } catch (error) {
-          console.error(error);
+          console.error("Failed to clear database:", error);
       }
     };
   }

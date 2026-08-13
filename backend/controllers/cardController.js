@@ -1,94 +1,158 @@
 const { PrismaClient } = require("@prisma/client");
+
 const prisma = new PrismaClient();
 
+
+// =====================================================
+// GET ALL CARDS
+// GET /cards
+// =====================================================
 exports.getCards = async (req, res) => {
-    const cards = await prisma.card.findMany();
-    res.json(cards);
-};
-
-
-// Retrieves all cards from the database and returns them as a JSON response.
-app.get("/cards", async (req, res) => {
     try {
         const cards = await prisma.card.findMany();
+
         res.json(cards);
+
     } catch (error) {
         console.error(error);
+
         res.status(500).json({
             error: "Failed to retrieve cards."
         });
     }
-});
+};
 
-//creates a card for the user to add to their collection. If quantity is not provided, it defaults to 1.
-app.post("/cards", async (req, res) => {
-    try {
-        const card = await prisma.card.create({
-            data: {
-                name: req.body.name,
-                quantity: req.body.quantity ?? 1
-            }
-        });
 
-        res.status(201).json(card);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "An error occurred while creating the card." });
-    }
-
-});
-
-//Searching and locating for a single card by its ID. If the card is not found, it returns a 404 error.]
-//format your card like: /cards/1 to test it out at the backend server. If the card is found, it returns the card details as a JSON response.
-app.get("/cards/:id", async (req, res) => {
+// =====================================================
+// GET CARD BY ID
+// GET /cards/:id
+// =====================================================
+exports.getCardById = async (req, res) => {
     try {
         const id = parseInt(req.params.id);
 
         const card = await prisma.card.findUnique({
-            where: { 
+            where: {
                 id: id
             }
         });
 
         if (!card) {
-            return res.status(404).json({ error: "Card not found." });
+            return res.status(404).json({
+                error: "Card not found."
+            });
         }
 
         res.json(card);
+
     } catch (error) {
         console.error(error);
-        res.status(500).json({ 
-            error: "An error occurred while retrieving the card." 
+
+        res.status(500).json({
+            error: "An error occurred while retrieving the card."
         });
     }
-});
+};
 
-//check to see if the server exists
-app.listen(3001, () => {
-    console.log("Server is running on port 3001.");
 
-});
-
-//updating a card:
-app.put("/cards/:id", async (req, res) => {
+// =====================================================
+// CREATE CARD
+// POST /cards
+// =====================================================
+exports.createCard = async (req, res) => {
     try {
-        const id = parseInt(req.params.id);
-        const updateCard = await prisma.card.update({
-            where: { id: id },
+        const card = await prisma.card.create({
             data: {
                 name: req.body.name,
-                quantity: req.body.quantity
+                quantity: req.body.quantity ?? 1,
+
+                // Include these if they exist in your Prisma model
+                set: req.body.set,
+                game: req.body.game,
+                rarity: req.body.rarity
             }
         });
-        res.json(updateCard);
+
+        res.status(201).json(card);
+
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "An error occurred while updating the card." });
+
+        res.status(500).json({
+            error: "An error occurred while creating the card."
+        });
     }
-});
+};
 
 
-//deleting a card:
+// =====================================================
+// UPDATE CARD
+// PUT /cards/:id
+// =====================================================
+exports.updateCard = async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+
+        const updatedCard = await prisma.card.update({
+            where: {
+                id: id
+            },
+
+            data: {
+                name: req.body.name,
+                quantity: req.body.quantity,
+
+                // Include these if they exist in your Prisma model
+                set: req.body.set,
+                game: req.body.game,
+                rarity: req.body.rarity
+            }
+        });
+
+        res.json(updatedCard);
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            error: "An error occurred while updating the card."
+        });
+    }
+};
+
+
+// =====================================================
+// DELETE ONE CARD
+// DELETE /cards/:id
+// =====================================================
+exports.deleteCard = async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+
+        await prisma.card.delete({
+            where: {
+                id: id
+            }
+        });
+
+        res.json({
+            message: "Card deleted successfully."
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            error: "An error occurred while deleting the card."
+        });
+    }
+};
+
+
+// =====================================================
+// DELETE ALL CARDS
+// DELETE /cards
+// =====================================================
 exports.clearCards = async (req, res) => {
     try {
         await prisma.card.deleteMany();

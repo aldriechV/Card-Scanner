@@ -1,5 +1,3 @@
-const API = "http://localhost:3001/cards";
-
 const API_URL = "http://localhost:3001/cards";
 
 export async function getCards() {
@@ -48,6 +46,10 @@ export async function deleteCard(id) {
     const response = await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
     });
+
+    if (!response.ok) {
+        throw new Error("Failed to delete card");
+    }
 }
 
 export async function clearCards() {
