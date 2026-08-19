@@ -120,7 +120,7 @@ function App() {
   }, [activeTab]);
 
   //Function to save the card from card details, will be used to save the card to the database in the future
-  async function saveCard() {
+async function saveCard() {
 
     const newCard = {
       name: cardDetails.cardName.trim(),

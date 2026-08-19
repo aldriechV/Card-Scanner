@@ -53,7 +53,7 @@ export async function deleteCard(id) {
 }
 
 export async function clearCards() {
-    await fetch(API_URL, {
+    const response = await fetch(API_URL, {
         method: "DELETE",
     });
 }
