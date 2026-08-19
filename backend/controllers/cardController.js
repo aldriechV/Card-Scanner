@@ -61,19 +61,53 @@ exports.getCardById = async (req, res) => {
 // =====================================================
 exports.createCard = async (req, res) => {
     try {
-        const card = await prisma.card.create({
-            data: {
-                name: req.body.name,
-                quantity: req.body.quantity ?? 1,
+        const {
+            name,
+            set,
+            game,
+            rarity,
+            quantity
+        } = req.body;
 
-                // Include these if they exist in your Prisma model
-                set: req.body.set,
-                game: req.body.game,
-                rarity: req.body.rarity
+        // Check if this card already exists
+        const existingCard = await prisma.card.findUnique({
+            where: {
+                name_set_game_rarity: {
+                    name: name,
+                    set: set,
+                    game: game,
+                    rarity: rarity
+                }
             }
         });
 
-        res.status(201).json(card);
+        // If it already exists, increase quantity
+        if (existingCard) {
+            const updatedCard = await prisma.card.update({
+                where: {
+                    id: existingCard.id
+                },
+                data: {
+                    quantity: existingCard.quantity + (quantity ?? 1),
+                    dateScanned: new Date()
+                }
+            });
+
+            return res.status(200).json(updatedCard);
+        }
+
+        // Otherwise create a new card
+        const newCard = await prisma.card.create({
+            data: {
+                name,
+                set,
+                game,
+                rarity,
+                quantity: quantity ?? 1
+            }
+        });
+
+        res.status(201).json(newCard);
 
     } catch (error) {
         console.error(error);
