@@ -150,16 +150,12 @@ async function saveCard() {
 
 
 async function clearCardDatabase() {
-    const clearDatabase = async () => {
       try {
           await clearCards();
-
           await loadCards(); 
-
       } catch (error) {
           console.error("Failed to clear database:", error);
       }
-    };
   }
 
   async function captureCard() {
