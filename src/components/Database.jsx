@@ -1,4 +1,12 @@
+import { useState } from "react";
+
 function CardDatabase({ savedCards, clearDatabase }) {
+
+  const [searcchTerm, setSearchTerm] = useState("");
+  const [selecetedGame, setSelectedGame] = useState("All");
+  const [selectedSet, setSelectedSet] = useState("All");
+  const [selectedOwner, setSelectedOwner] = useState("All");
+
   return (
     <div className="database-section">
       <h2>Scanned Card Database</h2>
