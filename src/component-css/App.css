@@ -207,35 +207,139 @@ h1 {
   transform: scale(0.98);
 }
 
+/* Database */
+
 .database-section {
-  max-width: 900px;
-  margin: 0 auto;
+  width: 100%;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.database-section h2 {
+  margin-bottom: 20px;
+}
+
+/* Two-column layout*/
+.database-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* Left column: Saved Cards */
+.database-entries {
+  min-width: 0;
 }
 
 .card-list {
   display: grid;
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
 }
 
+
+/* Individual card entries */
 .saved-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 18px;
+  padding: 20px;
+  border-radius: 12px;
   text-align: left;
+
+  background: #1e1e1e;
+  border: 1px solid #333;
+}
+
+.saved-card:hover {
+  background: #2a2a2a;
+  border-color: #555;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .saved-card h3 {
   margin-top: 0;
-  color: var(--text);
+  margin-bottom: 15px;
 }
 
 .saved-card p {
-  color: var(--text);
-  line-height: 1.5;
+  margin: 8px  0;
 }
 
 .date-scanned {
   color: var(--text);
   font-size: 0.85rem;
+}
+
+/* Search/Filter Section */
+.database-filters {
+  padding: 20px;
+  border-radius: 12px;
+
+  background: #1e1e1e;
+  border: 1px solid #333;
+
+  text-align: left;
+
+  position: sticky;
+  top: 20px;
+}
+
+.database-filters h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+/* Search box */
+.database-filters input {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 11px 12px;
+  margin-bottom: 18px;
+
+  border-radius: 8px;
+  border: 1px solid #444;
+
+  background: #2a2a2a;
+  color: white;
+
+  font-size: 14px;
+}
+
+.database-filters input:focus {
+  outline: none;
+  border-color: #777;
+}
+
+/* Filter labels */
+.database-filters label {
+  display: block;
+  margin-bottom: 6px;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Dropdowns */
+.database-filters select {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 11px 12px;
+  margin-bottom: 18px;
+
+  border-radius: 8px;
+  border: 1px solid #444;
+
+  background: #2a2a2a;
+  color: white;
+
+  font-size: 14px;
+}
+
+.database-filters select:focus {
+  outline: none;
+  border-color: #777;
 }
