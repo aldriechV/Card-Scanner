@@ -1,15 +1,29 @@
 :root {
-  --background: #000807;
-  --surface: #14161f;
 
+  --background: #050706;
+  --surface: #12141c;
+  --surface-2: #191c26;
+  --input-bg: #0d0f16;
+ 
   --primary: #9395D3;
   --primary-hover: #B3B7EE;
-
+  --primary-muted: rgba(147, 149, 211, 0.12);
+ 
   --text: #FBF9FF;
-  --text-secondary: #A2A3BB;
+  --text-secondary: #9092AC;
+  --text-label: #7A7C93;
+ 
+  --border: #26293A;
+  --border-strong: #353850;
+ 
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+}
 
-  --border: #353850;
 
+* {
+  box-sizing: border-box;
 }
 
 .app {
@@ -29,7 +43,8 @@ body {
   margin: 0;
   background-color: var(--background);
   color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Inter", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 .app {
@@ -134,6 +149,8 @@ h1 {
   margin-bottom: 12px;
 }
 
+/* Top Bar Styles */
+
 .top-bar {
   width: 100%;
   background: var(--background);
@@ -173,15 +190,14 @@ h1 {
   background: var(--background);
   border: 1px solid var(--border);
   border-radius: 999px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .tab {
   padding: 10px 18px;
-  border: 1px solid var(--border);
+  border: none;
   border-radius: 999px;
 
-  background: var(--background);
+  background: transparent;
   color: var(--text-secondary);
   cursor: pointer;
   font-size: 0.95rem;
@@ -342,4 +358,14 @@ h1 {
 .database-filters select:focus {
   outline: none;
   border-color: #777;
+}
+
+@media (max-width: 768px) {
+  .database-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .database-filters {
+    grid-template-columns: 1fr;
+  }
 }
